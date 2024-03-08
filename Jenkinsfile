@@ -1,36 +1,26 @@
-pipeline {
-    agent{
-        docker {
-           image 'node:14'
-        }
+pipeline{
+  agent any
+  stages{
+    stage("Build"){
+      steps{
+        build 'PES1UG21CS851-1'
+        sh 'g++ hello.cpp -o hello'
+      }
     }
-    stages {
-        stage('Clone repository') {
-            steps {
-                git branch: 'main'.
-                url: 'https://github.com/<user›/‹repo>.git'
-            }
-        }
-        stage('Install dependencies') {
-            steps {
-                sh 'npm install'
-            }
-        }
-        stage('Build application') {
-            steps {
-                sh 'npm run build'
-            }
-        }
-        stage ('Test application') {
-            steps {
-                sh 'npm test'
-            }
-        }
-        stage ('Push Docker image') {
-            steps {
-                sh 'docker build -t <user>/<image>:$BUILD_NUMBER .'
-                sh 'docker push <user>/<image>:$BUILD NUMBER'
-            }
-        }
-    }        
-}  
+    stage("Test"){
+      steps{
+        sh './hello'
+      }
+    }
+    stage("Deploy"){
+      steps{
+        echo 'Deploy'
+      }
+    }
+  }
+  post{
+    failure{
+      error 'Pipeline failed'
+    }
+  }
+}
