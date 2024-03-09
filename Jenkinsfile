@@ -1,27 +1,35 @@
-pipeline{
-  agent any
-  stages{
-    stage("Build"){
-      steps{
-        build 'PES1UG21CS851-1'
-        sh 'g++ hello.cpp -o hello'
-        .
-      }
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                sh 'g++ working.cpp -o temp'
+                 build job: 'PES1UG22CS851-1', wait: false
+                 echo 'Build by CS806 successful'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'cat working.cpp'
+                echo 'Test by CS806 successful'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+               
+                 echo 'Deploy by CS806 successful'
+            }
+        }
     }
-    stage("Test"){
-      steps{
-        sh './abhvhvhvhcde'
-      }
+
+    post {
+        failure {
+            
+                echo 'Pipeline Failed'
+          
+        }
     }
-    stage("Deploy"){
-      steps{
-        echo 'Deploy'
-      }
-    }
-  }
-  post{
-    failure{
-      error 'Pipeline failed'
-    }
-  }
 }
